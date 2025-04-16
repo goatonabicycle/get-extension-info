@@ -2,7 +2,7 @@ name: Update Data
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # Every 30 minutes
+    - cron: '0 0 * * *'  # Run at midnight UTC every day
   workflow_dispatch:  # Manual trigger option
 
 jobs:
@@ -16,6 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+            
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -24,7 +32,9 @@ jobs:
           cache-dependency-path: package-lock.json
           
       - name: Install dependencies
-        run: npm ci --production
+        run: |
+          npm ci --production --prefer-offline --no-audit
+          npm cache clean --force
         
       - name: Generate data
         run: |
