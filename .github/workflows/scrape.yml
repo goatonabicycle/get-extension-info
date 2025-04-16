@@ -18,7 +18,11 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm ci
+          if [ ! -f package-lock.json ]; then
+            npm install
+          fi
         
       - name: Generate data
         run: node index.js
