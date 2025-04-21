@@ -19,7 +19,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 10.9.0
           run_install: false
           
       - name: Get pnpm store directory
@@ -36,7 +36,12 @@ jobs:
             ${{ runner.os }}-pnpm-store-
             
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prod
+        run: |
+          if [ -f "pnpm-lock.yaml" ]; then
+            pnpm install --frozen-lockfile --prod
+          else
+            pnpm install --prod
+          fi
         
       - name: Generate data
         run: |
