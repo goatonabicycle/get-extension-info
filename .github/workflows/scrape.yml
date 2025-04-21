@@ -2,7 +2,7 @@ name: Update Data
 
 on:
   schedule:
-    - cron: '0 */2 * * *'  # Every 2 hours
+    - cron: '*/20 * * * *'  # Every 20 minutes
   workflow_dispatch:  # Manual trigger option
 
 jobs:
@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write
+      id-token: write
       
     steps:
       - uses: actions/checkout@v4
@@ -39,9 +41,12 @@ jobs:
           mkdir -p data
           node index.js
         
-      - name: Upload data as artifact
-        uses: actions/upload-artifact@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: extension-data
-          path: data/extension-latest.json
-          retention-days: 30 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./data
+          publish_branch: gh-pages
+          commit_message: "Update extension data"
+          force_orphan: true
+          keep_files: false 
