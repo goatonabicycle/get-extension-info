@@ -42,6 +42,13 @@ jobs:
           else
             pnpm install --prod
           fi
+          
+      - name: Install Chrome
+        run: |
+          pnpm exec puppeteer browsers install chrome
+          CHROME_PATH=$(pnpm exec puppeteer browsers path chrome)
+          echo "CHROME_PATH=$CHROME_PATH" >> $GITHUB_ENV
+          echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> $GITHUB_ENV
         
       - name: Generate data
         run: |
@@ -57,3 +64,4 @@ jobs:
           commit_message: "Update extension data"
           force_orphan: true
           keep_files: false 
+          retention-days: 30 
