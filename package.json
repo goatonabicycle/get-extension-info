@@ -2,12 +2,13 @@
   "name": "get-extension-info",
   "version": "1.0.0",
   "main": "index.js",
+  "packageManager": "pnpm@10.9.0",
   "scripts": {
     "start": "node index.js",
-    "lint": "npx @biomejs/biome format --write ."
+    "lint": "pnpm exec @biomejs/biome format --write ."
   },
   "dependencies": {
-    "puppeteer": "^21.0.0"
+    "puppeteer": "^22.8.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4"
