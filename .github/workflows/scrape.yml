@@ -55,13 +55,19 @@ jobs:
           mkdir -p data
           node index.js
         
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./data
-          publish_branch: gh-pages
-          commit_message: "Update extension data"
-          force_orphan: true
-          keep_files: false 
-          retention-days: 30 
+          path: ./data
+          
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: data
+          clean: true
+          clean-exclude: |
+            .git
+            .gitattributes
+            .github 
