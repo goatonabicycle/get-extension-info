@@ -7,6 +7,9 @@ const EXTENSIONS = [
   "cfhdojbkjhnklbpkdaibdccddilifddb", // Adblock Plus
 ];
 
+const LATEST_DATA_PATH = path.join(__dirname, "data", "extension-latest.json");
+const HISTORY_DATA_PATH = path.join(__dirname, "data", "extension-history.json");
+
 async function getExtensionInfo(extensionId) {
   const browser = await puppeteer.launch({
     headless: "new",
@@ -105,39 +108,100 @@ async function getExtensionInfo(extensionId) {
 }
 
 async function main() {
+  let historyData = [];
+
   try {
-    const dataDir = path.join(__dirname, "data");
-    await fs.mkdir(dataDir, { recursive: true });
-
-    const results = await Promise.all(
-      EXTENSIONS.map(async (id) => {
-        try {
-          console.log(`\nScraping ${id}...`);
-          const info = await getExtensionInfo(id);
-          console.log("Successfully scraped");
-          return info;
-        } catch (error) {
-          console.error(`Error scraping ${id}:`, error.message);
-          return null;
-        }
-      }),
-    );
-
-    const validResults = results.filter(Boolean);
-    if (validResults.length === 0) {
-      throw new Error("Failed to scrape any extensions");
-    }
-
-    await fs.writeFile(
-      path.join(dataDir, "extension-latest.json"),
-      JSON.stringify(validResults, null, 2),
-    );
-
-    console.log("\nScript completed successfully");
+    const historyContent = await fs.readFile(HISTORY_DATA_PATH, "utf8");
+    const validJSON = historyContent.replace(/^\s*\/\/.*\r?\n/mg, '');
+    historyData = JSON.parse(validJSON);
+    console.log(`Loaded history data for ${historyData.length} extensions`);
   } catch (error) {
-    console.error("Error:", error);
-    process.exit(1);
+    console.log("No existing history file found, checking for latest data to use as initial history");
+
+    try {
+      const latestContent = await fs.readFile(LATEST_DATA_PATH, "utf8");
+      const validJSON = latestContent.replace(/^\s*\/\/.*\r?\n/mg, '');
+      const latestData = JSON.parse(validJSON);
+      console.log(`Found latest data for ${latestData.length} extensions, using as initial history`);
+
+      for (let i = 0; i < latestData.length; i++) {
+        const ext = latestData[i];
+        if (ext.url) {
+          const urlMatch = ext.url.match(/\/([^\/]+?)$/);
+          const id = urlMatch ? urlMatch[1] : null;
+
+          if (id) {
+            historyData.push({
+              id: id,
+              name: ext.extension,
+              updates: [{
+                version: ext.version,
+                users: ext.users,
+                size: ext.size,
+                lastUpdated: ext.lastUpdated,
+                recordedAt: ext.lastChecked || new Date().toISOString()
+              }]
+            });
+          }
+        }
+      }
+
+      console.log(`Initialized history with ${historyData.length} extensions from latest data`);
+    } catch (latestError) {
+      console.log("No existing latest data file found either, starting fresh");
+    }
   }
+
+  const newLatestData = [];
+
+  for (const extensionId of EXTENSIONS) {
+    try {
+      const extensionInfo = await getExtensionInfo(extensionId);
+      newLatestData.push(extensionInfo);
+
+      let extensionHistory = historyData.find(e => e.id === extensionId);
+      if (!extensionHistory) {
+        extensionHistory = {
+          id: extensionId,
+          name: extensionInfo.extension,
+          updates: [
+            {
+              version: extensionInfo.version,
+              users: extensionInfo.users,
+              size: extensionInfo.size,
+              lastUpdated: extensionInfo.lastUpdated,
+              recordedAt: new Date().toISOString()
+            }
+          ]
+        };
+        historyData.push(extensionHistory);
+        continue;
+      }
+
+      const lastUpdate = extensionHistory.updates[extensionHistory.updates.length - 1];
+
+      if (lastUpdate.version !== extensionInfo.version ||
+        lastUpdate.users !== extensionInfo.users ||
+        lastUpdate.size !== extensionInfo.size) {
+
+        extensionHistory.updates.push({
+          version: extensionInfo.version,
+          users: extensionInfo.users,
+          size: extensionInfo.size,
+          lastUpdated: extensionInfo.lastUpdated,
+          recordedAt: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error(`Error fetching info for ${extensionId}:`, error);
+    }
+  }
+
+  await fs.mkdir(path.dirname(LATEST_DATA_PATH), { recursive: true });
+  await fs.writeFile(LATEST_DATA_PATH, JSON.stringify(newLatestData, null, 2));
+  await fs.writeFile(HISTORY_DATA_PATH, JSON.stringify(historyData, null, 2));
+
+  console.log("Extension data updated");
 }
 
-main();
+main().catch(console.error);
