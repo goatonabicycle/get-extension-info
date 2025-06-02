@@ -80,18 +80,20 @@ async function getExtensionInfo(extensionId) {
 			};
 
 			const getLastUpdated = () => {
-				const dateEl = Array.from(document.querySelectorAll("div")).find((el) =>
-					el.textContent.match(
-						/\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\b/,
-					),
-				);
-				if (!dateEl) return null;
-				const match = dateEl.textContent.match(
-					/\b((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4})\b/,
-				);
-				return match
-					? match[1].replace(/(\d+),/, (_, day) => `${Number.parseInt(day)},`)
-					: null;
+				const dateElements = Array.from(document.querySelectorAll("div")).filter((el) => {
+					const text = el.textContent || "";
+					return text.match(/\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/) &&
+						text.match(/\b\d{4}\b/);
+				});
+
+				if (!dateElements.length) return null;
+
+				const dateText = dateElements[0].textContent.trim();
+				const dateMatch = dateText.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),\s+(?<year>\d{4})\b/);
+
+				if (!dateMatch || !dateMatch.groups) return null;
+
+				return `${dateMatch.groups.month} ${Number.parseInt(dateMatch.groups.day)}, ${dateMatch.groups.year}`;
 			};
 
 			return {
@@ -100,6 +102,7 @@ async function getExtensionInfo(extensionId) {
 				version: getVersion(),
 				users: getUsers(),
 				size: getSize(),
+				store: "chrome",
 				url: window.location.href,
 				lastChecked: new Date().toISOString(),
 			};
@@ -147,6 +150,7 @@ async function main() {
 									version: ext.version,
 									users: ext.users,
 									size: ext.size,
+									store: ext.store || "chrome",
 									lastUpdated: ext.lastUpdated,
 									recordedAt: ext.lastChecked || new Date().toISOString(),
 								},
@@ -176,15 +180,14 @@ async function main() {
 				extensionHistory = {
 					id: extensionId,
 					name: extensionInfo.extension,
-					updates: [
-						{
-							version: extensionInfo.version,
-							users: extensionInfo.users,
-							size: extensionInfo.size,
-							lastUpdated: extensionInfo.lastUpdated,
-							recordedAt: new Date().toISOString(),
-						},
-					],
+					updates: [{
+						version: extensionInfo.version,
+						users: extensionInfo.users,
+						size: extensionInfo.size,
+						store: extensionInfo.store,
+						lastUpdated: extensionInfo.lastUpdated,
+						recordedAt: new Date().toISOString(),
+					}],
 				};
 				historyData.push(extensionHistory);
 				continue;
@@ -202,6 +205,7 @@ async function main() {
 					version: extensionInfo.version,
 					users: extensionInfo.users,
 					size: extensionInfo.size,
+					store: extensionInfo.store,
 					lastUpdated: extensionInfo.lastUpdated,
 					recordedAt: new Date().toISOString(),
 				});
