@@ -126,7 +126,6 @@ async function getExtensionInfo(extensionId) {
 				version: getVersion(),
 				users: getUsers(),
 				size: getSize(),
-				store: "chrome",
 				url: window.location.href,
 				lastChecked: new Date().toISOString(),
 			};
@@ -175,16 +174,13 @@ async function main() {
 						historyData.chrome.push({
 							id: id,
 							name: ext.extension,
-							updates: [
-								{
-									version: ext.version,
-									users: ext.users,
-									size: ext.size,
-									store: ext.store || "chrome",
-									lastUpdated: ext.lastUpdated,
-									recordedAt: ext.lastChecked || new Date().toISOString(),
-								},
-							],
+							updates: [{
+								version: ext.version,
+								users: ext.users,
+								size: ext.size,
+								lastUpdated: ext.lastUpdated,
+								recordedAt: ext.lastChecked || new Date().toISOString(),
+							}],
 						});
 					}
 				}
@@ -238,7 +234,6 @@ async function main() {
 					version: extensionInfo.version,
 					users: extensionInfo.users,
 					size: extensionInfo.size,
-					store: extensionInfo.store,
 					lastUpdated: extensionInfo.lastUpdated,
 					recordedAt: new Date().toISOString(),
 				});
