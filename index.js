@@ -69,7 +69,6 @@ async function getExtensionInfo(extensionId) {
 				const match = userEl.textContent.match(/(\d+,?\d+,?\d+,?\d+)/);
 				return match ? Number.parseInt(match[1].replace(/,/g, "")) : null;
 			};
-
 			const getSize = () => {
 				const sizeEl = Array.from(document.querySelectorAll("div")).find((el) =>
 					el.textContent.includes("Size"),
@@ -80,20 +79,45 @@ async function getExtensionInfo(extensionId) {
 			};
 
 			const getLastUpdated = () => {
-				const dateElements = Array.from(document.querySelectorAll("div")).filter((el) => {
+				const isValidDateText = (text) => {
+					return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
+						/\b\d{4}\b/.test(text);
+				};
+
+				const updatedLabels = Array.from(document.querySelectorAll("div")).filter(el =>
+					el.textContent.trim() === "Updated" ||
+					el.textContent.includes("Last updated") ||
+					el.textContent.includes("Updated:")
+				);
+
+				if (updatedLabels.length > 0) {
+					const dateElement = updatedLabels[0].nextElementSibling ||
+						updatedLabels[0].parentElement?.nextElementSibling;
+
+					if (dateElement) {
+						const dateText = dateElement.textContent.trim();
+						if (isValidDateText(dateText)) {
+							return dateText;
+						}
+					}
+				}
+
+				const dateElements = Array.from(document.querySelectorAll("div")).filter(el => {
 					const text = el.textContent || "";
-					return text.match(/\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/) &&
-						text.match(/\b\d{4}\b/);
+					return isValidDateText(text) &&
+						(text.includes("Updated") || text.includes("Published"));
 				});
 
-				if (!dateElements.length) return null;
+				if (dateElements.length > 0) {
+					const dateText = dateElements[0].textContent.trim();
+					const dateMatch = dateText.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
 
-				const dateText = dateElements[0].textContent.trim();
-				const dateMatch = dateText.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),\s+(?<year>\d{4})\b/);
+					if (dateMatch?.groups) {
+						return `${dateMatch.groups.month} ${Number.parseInt(dateMatch.groups.day)}, ${dateMatch.groups.year}`;
+					}
+				}
 
-				if (!dateMatch || !dateMatch.groups) return null;
-
-				return `${dateMatch.groups.month} ${Number.parseInt(dateMatch.groups.day)}, ${dateMatch.groups.year}`;
+				return null;
 			};
 
 			return {
@@ -115,34 +139,40 @@ async function getExtensionInfo(extensionId) {
 }
 
 async function main() {
-	let historyData = [];
+	let historyData = { chrome: [] };
 
 	try {
 		const historyContent = await fs.readFile(HISTORY_DATA_PATH, "utf8");
 		const validJSON = historyContent.replace(/^\s*\/\/.*\r?\n/gm, "");
 		historyData = JSON.parse(validJSON);
-		console.log(`Loaded history data for ${historyData.length} extensions`);
+		console.log(`Loaded history data for ${Object.keys(historyData).length} stores`);
 	} catch (error) {
 		console.log(
 			"No existing history file found, checking for latest data to use as initial history",
 		);
-
 		try {
 			const latestContent = await fs.readFile(LATEST_DATA_PATH, "utf8");
 			const validJSON = latestContent.replace(/^\s*\/\/.*\r?\n/gm, "");
 			const latestData = JSON.parse(validJSON);
+
+			const latestExtensions = latestData.chrome || [];
+
 			console.log(
-				`Found latest data for ${latestData.length} extensions, using as initial history`,
+				`Found latest data for ${latestExtensions.length} chrome extensions, using as initial history`,
 			);
 
-			for (let i = 0; i < latestData.length; i++) {
-				const ext = latestData[i];
+			if (!historyData.chrome) {
+				historyData.chrome = [];
+			}
+
+			for (let i = 0; i < latestExtensions.length; i++) {
+				const ext = latestExtensions[i];
 				if (ext.url) {
 					const urlMatch = ext.url.match(/\/([^\/]+?)$/);
 					const id = urlMatch ? urlMatch[1] : null;
 
 					if (id) {
-						historyData.push({
+						historyData.chrome.push({
 							id: id,
 							name: ext.extension,
 							updates: [
@@ -161,22 +191,25 @@ async function main() {
 			}
 
 			console.log(
-				`Initialized history with ${historyData.length} extensions from latest data`,
+				`Initialized history with ${historyData.chrome.length} extensions from latest data`,
 			);
 		} catch (latestError) {
 			console.log("No existing latest data file found either, starting fresh");
 		}
 	}
 
-	const newLatestData = [];
+	const newLatestData = { chrome: [] };
 
 	for (const extensionId of EXTENSIONS) {
 		try {
 			const extensionInfo = await getExtensionInfo(extensionId);
-			newLatestData.push(extensionInfo);
+			newLatestData.chrome.push(extensionInfo);
 
-			let extensionHistory = historyData.find((e) => e.id === extensionId);
-			if (!extensionHistory) {
+			if (!historyData.chrome) {
+				historyData.chrome = [];
+			}
+
+			let extensionHistory = historyData.chrome.find((e) => e.id === extensionId); if (!extensionHistory) {
 				extensionHistory = {
 					id: extensionId,
 					name: extensionInfo.extension,
@@ -189,7 +222,7 @@ async function main() {
 						recordedAt: new Date().toISOString(),
 					}],
 				};
-				historyData.push(extensionHistory);
+				historyData.chrome.push(extensionHistory);
 				continue;
 			}
 

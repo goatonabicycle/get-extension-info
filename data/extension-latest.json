@@ -1,20 +1,24 @@
-[
-  {
-    "extension": "AdBlock — block ads across the web",
-    "lastUpdated": "May 17, 2025",
-    "version": "6.20.1",
-    "users": 63000000,
-    "size": "55.52MiB",
-    "url": "https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom",
-    "lastChecked": "2025-05-21T21:57:57.018Z"
-  },
-  {
-    "extension": "Adblock Plus - free ad blocker",
-    "lastUpdated": "May 16, 2025",
-    "version": "4.21.3",
-    "users": 42000000,
-    "size": "53.64MiB",
-    "url": "https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb",
-    "lastChecked": "2025-05-21T21:58:03.808Z"
-  }
-]
+{
+  "chrome": [
+    {
+      "extension": "AdBlock — block ads across the web",
+      "lastUpdated": "May 30, 2025",
+      "version": "6.21.1",
+      "users": 62000000,
+      "size": "54.97MiB",
+      "store": "chrome",
+      "url": "https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom",
+      "lastChecked": "2025-06-04T17:14:24.777Z"
+    },
+    {
+      "extension": "Adblock Plus - free ad blocker",
+      "lastUpdated": "May 23, 2025",
+      "version": "4.22.0",
+      "users": 41000000,
+      "size": "52.83MiB",
+      "store": "chrome",
+      "url": "https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb",
+      "lastChecked": "2025-06-04T17:14:31.483Z"
+    }
+  ]
+}
