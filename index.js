@@ -3,10 +3,16 @@ const fs = require("node:fs").promises;
 const path = require("node:path");
 const { setupBrowser } = require("./browser");
 const { extractExtensionId, updateExtensionHistory } = require("./utils");
+const { fetchFirefoxExtensionInfo } = require("./firefox-api");
 
 const CHROME_EXTENSIONS = [
 	"gighmmpiobklfepjocnamgkkbiglidom", // AdBlock
 	"cfhdojbkjhnklbpkdaibdccddilifddb", // Adblock Plus
+];
+
+const FIREFOX_EXTENSIONS = [
+	{ slug: "adblock-for-firefox", guid: "jid1-NIfFY2CA8fy1tg@jetpack" },  // AdBlock
+	{ slug: "adblock-plus", guid: "{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}" },  // Adblock Plus
 ];
 
 const LATEST_DATA_PATH = path.join(__dirname, "data", "extension-latest.json");
@@ -140,12 +146,31 @@ async function fetchAllChromeExtensionsInfo() {
 	} finally {
 		await cleanup();
 	}
+	return extensionsInfo;
+}
+
+async function fetchAllFirefoxExtensionsInfo() {
+	const extensionsInfo = [];
+
+	try {
+		for (const extension of FIREFOX_EXTENSIONS) {
+			try {
+				console.log(`Fetching Firefox extension: ${extension.slug}`);
+				const extensionInfo = await fetchFirefoxExtensionInfo(extension.slug);
+				extensionsInfo.push(extensionInfo);
+			} catch (error) {
+				console.error(`Error fetching info for Firefox extension ${extension.slug}:`, error);
+			}
+		}
+	} catch (error) {
+		console.error("Error in fetchAllFirefoxExtensionsInfo:", error);
+	}
 
 	return extensionsInfo;
 }
 
 async function main() {
-	let historyData = { chrome: [] };
+	let historyData = { chrome: [], firefox: [] };
 
 	try {
 		const historyContent = await fs.readFile(HISTORY_DATA_PATH, "utf8");
@@ -161,16 +186,19 @@ async function main() {
 			const validJSON = latestContent.replace(/^\s*\/\/.*\r?\n/gm, "");
 			const latestData = JSON.parse(validJSON);
 
-			const latestExtensions = latestData.chrome || [];
+			const latestChromeExtensions = latestData.chrome || [];
+			const latestFirefoxExtensions = latestData.firefox || [];
 
 			console.log(
-				`Found latest data for ${latestExtensions.length} chrome extensions, using as initial history`,
+				`Found latest data for ${latestChromeExtensions.length} chrome extensions and ${latestFirefoxExtensions.length} firefox extensions, using as initial history`,
 			);
 
 			if (!historyData.chrome) {
 				historyData.chrome = [];
-			} for (let i = 0; i < latestExtensions.length; i++) {
-				const ext = latestExtensions[i];
+			}
+
+			for (let i = 0; i < latestChromeExtensions.length; i++) {
+				const ext = latestChromeExtensions[i];
 				if (ext.url) {
 					const id = extractExtensionId(ext.url);
 
@@ -190,27 +218,52 @@ async function main() {
 				}
 			}
 
+			if (!historyData.firefox) {
+				historyData.firefox = [];
+			} for (let i = 0; i < latestFirefoxExtensions.length; i++) {
+				const ext = latestFirefoxExtensions[i];
+				const extId = extractExtensionId(ext.url);
+				if (extId) {
+					historyData.firefox.push({
+						id: extId,
+						name: ext.extension,
+						updates: [{
+							version: ext.version,
+							users: ext.users,
+							size: ext.size,
+							lastUpdated: ext.lastUpdated,
+							recordedAt: ext.lastChecked || new Date().toISOString(),
+						}],
+					});
+				}
+			}
+
 			console.log(
-				`Initialized history with ${historyData.chrome.length} extensions from latest data`,
+				`Initialized history with ${historyData.chrome.length} Chrome extensions and ${historyData.firefox.length} Firefox extensions from latest data`,
 			);
 		} catch (latestError) {
 			console.log("No existing latest data file found either, starting fresh");
 		}
 	}
-	const newLatestData = { chrome: [] };
+	const newLatestData = { chrome: [], firefox: [] };
 
-	const chromeExtensionsInfo = await fetchAllChromeExtensionsInfo();
-	newLatestData.chrome = chromeExtensionsInfo;
+	const chromeExtensionsInfo = await fetchAllChromeExtensionsInfo(); newLatestData.chrome = chromeExtensionsInfo;
 
 	for (const extensionInfo of chromeExtensionsInfo) {
 		historyData = updateExtensionHistory(historyData, 'chrome', extensionInfo);
+	}
+
+	const firefoxExtensionsInfo = await fetchAllFirefoxExtensionsInfo();
+	newLatestData.firefox = firefoxExtensionsInfo;
+	for (const extensionInfo of firefoxExtensionsInfo) {
+		historyData = updateExtensionHistory(historyData, 'firefox', extensionInfo, 'url');
 	}
 
 	await fs.mkdir(path.dirname(LATEST_DATA_PATH), { recursive: true });
 	await fs.writeFile(LATEST_DATA_PATH, JSON.stringify(newLatestData, null, 2));
 	await fs.writeFile(HISTORY_DATA_PATH, JSON.stringify(historyData, null, 2));
 
-	console.log("Extension data updated");
+	console.log("Extension data updated for Chrome and Firefox");
 }
 
 main().catch(console.error);

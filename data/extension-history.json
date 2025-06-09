@@ -68,5 +68,33 @@
         }
       ]
     }
+  ],
+  "firefox": [
+    {
+      "id": "adblock-for-firefox",
+      "name": "AdBlock for Firefox",
+      "updates": [
+        {
+          "version": "6.21.1",
+          "users": 1283053,
+          "size": "5.50 MiB",
+          "lastUpdated": "May 28, 2025",
+          "recordedAt": "2025-06-09T16:31:37.324Z"
+        }
+      ]
+    },
+    {
+      "id": "adblock-plus",
+      "name": "Adblock Plus",
+      "updates": [
+        {
+          "version": "4.22.0",
+          "users": 3208851,
+          "size": "4.31 MiB",
+          "lastUpdated": "May 27, 2025",
+          "recordedAt": "2025-06-09T16:31:37.324Z"
+        }
+      ]
+    }
   ]
 }

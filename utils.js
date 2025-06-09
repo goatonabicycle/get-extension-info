@@ -4,10 +4,16 @@ function extractExtensionId(url) {
   return urlMatch ? urlMatch[1] : null;
 }
 
-function updateExtensionHistory(historyData, store, extensionInfo) {
-  if (!extensionInfo.url) return historyData;
+function updateExtensionHistory(historyData, store, extensionInfo, idField = 'url') {
+  let extensionId;
+  if (idField === 'guid' && extensionInfo.guid) {
+    extensionId = extensionInfo.guid;
+  } else if (extensionInfo.url) {
+    extensionId = extractExtensionId(extensionInfo.url);
+  } else {
+    return historyData;
+  }
 
-  const extensionId = extractExtensionId(extensionInfo.url);
   if (!extensionId) return historyData;
 
   if (!historyData[store]) {
