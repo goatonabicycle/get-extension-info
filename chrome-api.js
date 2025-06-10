@@ -1,10 +1,5 @@
 const { setupBrowser } = require('./browser');
 
-/**
- * Fetches information about a Chrome extension by its ID
- * @param {string} extensionId - The Chrome extension ID
- * @returns {Promise<Object>} Extension information
- */
 async function fetchChromeExtensionInfo(extensionId) {
   const { createPage, cleanup } = await setupBrowser();
   let extensionData = null;

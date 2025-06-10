@@ -1,7 +1,5 @@
-const puppeteer = require("puppeteer");
 const fs = require("node:fs").promises;
 const path = require("node:path");
-const { setupBrowser } = require("./browser");
 const { extractExtensionId, updateExtensionHistory } = require("./utils");
 const { fetchFirefoxExtensionInfo } = require("./firefox-api");
 const { fetchChromeExtensionInfo } = require("./chrome-api");
@@ -89,7 +87,7 @@ async function main() {
 
 			if (!historyData.chrome) {
 				historyData.chrome = [];
-			}			for (let i = 0; i < latestChromeExtensions.length; i++) {
+			} for (let i = 0; i < latestChromeExtensions.length; i++) {
 				const ext = latestChromeExtensions[i];
 				if (ext.url) {
 					const id = extractExtensionId(ext.url);
