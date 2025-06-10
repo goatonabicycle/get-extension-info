@@ -7,7 +7,7 @@
       "users": 62000000,
       "size": "55.68MiB",
       "url": "https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom",
-      "lastChecked": "2025-06-10T23:08:05.715Z"
+      "lastChecked": "2025-06-10T23:28:17.104Z"
     },
     {
       "extension": "Adblock Plus - free ad blocker",
@@ -16,7 +16,7 @@
       "users": 41000000,
       "size": "53.78MiB",
       "url": "https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb",
-      "lastChecked": "2025-06-10T23:08:11.051Z"
+      "lastChecked": "2025-06-10T23:28:22.737Z"
     }
   ],
   "firefox": [
@@ -27,7 +27,7 @@
       "users": 1275742,
       "size": "5.52MiB",
       "url": "https://addons.mozilla.org/en-US/firefox/addon/adblock-for-firefox/",
-      "lastChecked": "2025-06-10T23:08:11.403Z"
+      "lastChecked": "2025-06-10T23:28:23.383Z"
     },
     {
       "extension": "Adblock Plus",
@@ -36,7 +36,7 @@
       "users": 3183368,
       "size": "4.34MiB",
       "url": "https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/",
-      "lastChecked": "2025-06-10T23:08:11.425Z"
+      "lastChecked": "2025-06-10T23:28:23.687Z"
     }
   ]
 }

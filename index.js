@@ -10,8 +10,8 @@ const CHROME_EXTENSIONS = [
 ];
 
 const FIREFOX_EXTENSIONS = [
-	{ slug: "adblock-for-firefox", guid: "jid1-NIfFY2CA8fy1tg@jetpack" },  // AdBlock
-	{ slug: "adblock-plus", guid: "{d10d0bf8-f5b5-c8b4-a8b2-2b9879e08c5d}" },  // Adblock Plus
+	{ slug: "adblock-for-firefox" },  // AdBlock
+	{ slug: "adblock-plus" },  // Adblock Plus
 ];
 
 const LATEST_DATA_PATH = path.join(__dirname, "data", "extension-latest.json");
@@ -24,18 +24,10 @@ const HISTORY_DATA_PATH = path.join(
 async function fetchAllChromeExtensionsInfo() {
 	const extensionsInfo = [];
 
-	try {
-		for (const extensionId of CHROME_EXTENSIONS) {
-			try {
-				console.log(`Fetching Chrome extension: ${extensionId}`);
-				const extensionInfo = await fetchChromeExtensionInfo(extensionId);
-				extensionsInfo.push(extensionInfo);
-			} catch (error) {
-				console.error(`Error fetching info for Chrome extension ${extensionId}:`, error);
-			}
-		}
-	} catch (error) {
-		console.error("Error in fetchAllChromeExtensionsInfo:", error);
+	for (const extensionId of CHROME_EXTENSIONS) {
+		console.log(`Fetching Chrome extension: ${extensionId}`);
+		const extensionInfo = await fetchChromeExtensionInfo(extensionId);
+		extensionsInfo.push(extensionInfo);
 	}
 
 	return extensionsInfo;
@@ -44,18 +36,11 @@ async function fetchAllChromeExtensionsInfo() {
 async function fetchAllFirefoxExtensionsInfo() {
 	const extensionsInfo = [];
 
-	try {
-		for (const extension of FIREFOX_EXTENSIONS) {
-			try {
-				console.log(`Fetching Firefox extension: ${extension.slug}`);
-				const extensionInfo = await fetchFirefoxExtensionInfo(extension.slug);
-				extensionsInfo.push(extensionInfo);
-			} catch (error) {
-				console.error(`Error fetching info for Firefox extension ${extension.slug}:`, error);
-			}
-		}
-	} catch (error) {
-		console.error("Error in fetchAllFirefoxExtensionsInfo:", error);
+	for (const extension of FIREFOX_EXTENSIONS) {
+
+		console.log(`Fetching Firefox extension: ${extension.slug}`);
+		const extensionInfo = await fetchFirefoxExtensionInfo(extension.slug);
+		extensionsInfo.push(extensionInfo);
 	}
 
 	return extensionsInfo;
@@ -87,7 +72,9 @@ async function main() {
 
 			if (!historyData.chrome) {
 				historyData.chrome = [];
-			} for (let i = 0; i < latestChromeExtensions.length; i++) {
+			}
+
+			for (let i = 0; i < latestChromeExtensions.length; i++) {
 				const ext = latestChromeExtensions[i];
 				if (ext.url) {
 					const id = extractExtensionId(ext.url);
@@ -110,7 +97,9 @@ async function main() {
 
 			if (!historyData.firefox) {
 				historyData.firefox = [];
-			} for (let i = 0; i < latestFirefoxExtensions.length; i++) {
+			}
+
+			for (let i = 0; i < latestFirefoxExtensions.length; i++) {
 				const ext = latestFirefoxExtensions[i];
 				const extId = extractExtensionId(ext.url);
 				if (extId) {
@@ -135,8 +124,8 @@ async function main() {
 			console.log("No existing latest data file found either, starting fresh");
 		}
 	}
-	const newLatestData = { chrome: [], firefox: [] };
 
+	const newLatestData = { chrome: [], firefox: [] };
 	const chromeExtensionsInfo = await fetchAllChromeExtensionsInfo(); newLatestData.chrome = chromeExtensionsInfo;
 
 	for (const extensionInfo of chromeExtensionsInfo) {
