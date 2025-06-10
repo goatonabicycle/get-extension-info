@@ -1,5 +1,3 @@
-const https = require('node:https');
-
 async function fetchFirefoxExtensionInfo(slug) {
   const apiUrl = `https://addons.mozilla.org/api/v5/addons/addon/${slug}/`;
   console.log(`Fetching from API: ${apiUrl}`);
@@ -11,7 +9,8 @@ async function fetchFirefoxExtensionInfo(slug) {
       }
     });
 
-    console.log(`Status code: ${response.status}`); if (!response.ok) {
+    console.log(`Status code: ${response.status}`);
+    if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`HTTP error: ${response.status} - ${errorText}`);
     }
@@ -28,10 +27,16 @@ async function fetchFirefoxExtensionInfo(slug) {
 
     return formattedData;
   } catch (err) {
+    console.error(`Error fetching Firefox extension ${slug}:`, err);
     throw new Error(`Failed to fetch extension info: ${err.message}`);
   }
 }
 
+/**
+ * Formats file size from bytes to KiB or MiB
+ * @param {number} sizeInBytes - File size in bytes
+ * @returns {string|null} Formatted file size or null if invalid
+ */
 function formatFileSize(sizeInBytes) {
   if (!sizeInBytes) return null;
 
@@ -60,21 +65,3 @@ function formatDate(dateString) {
 module.exports = {
   fetchFirefoxExtensionInfo
 };
-
-if (require.main === module) {
-  async function main() {
-    try {
-      console.log('Fetching AdBlock for Firefox info...');
-      const adblockInfo = await fetchFirefoxExtensionInfo('adblock-for-firefox');
-      console.log(JSON.stringify(adblockInfo, null, 2));
-
-      console.log('\nFetching Adblock Plus info...');
-      const adblockPlusInfo = await fetchFirefoxExtensionInfo('adblock-plus');
-      console.log(JSON.stringify(adblockPlusInfo, null, 2));
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-
-  main();
-}

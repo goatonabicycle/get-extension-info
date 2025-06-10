@@ -1,8 +1,7 @@
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const { extractExtensionId, updateExtensionHistory } = require("./utils");
-const { fetchFirefoxExtensionInfo } = require("./firefox-api");
-const { fetchChromeExtensionInfo } = require("./chrome-api");
+const { fetchFirefoxExtensionInfo, fetchChromeExtensionInfo } = require("./api");
 
 const CHROME_EXTENSIONS = [
 	"gighmmpiobklfepjocnamgkkbiglidom", // AdBlock

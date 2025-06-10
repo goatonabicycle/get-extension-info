@@ -1,4 +1,4 @@
-const { setupBrowser } = require('./browser');
+const { setupBrowser } = require('../browser');
 
 async function fetchChromeExtensionInfo(extensionId) {
   const { createPage, cleanup } = await setupBrowser();
