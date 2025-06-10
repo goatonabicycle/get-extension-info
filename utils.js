@@ -47,11 +47,37 @@ function updateExtensionHistory(historyData, store, extensionInfo, idField = 'ur
     lastUpdate.size !== update.size) {
     extensionHistory.updates.push(update);
   }
-
   return historyData;
+}
+
+function formatFileSize(sizeInBytes) {
+  if (!sizeInBytes) return null;
+
+  const KB = 1024;
+  const MB = KB * 1024;
+
+  if (sizeInBytes >= MB) {
+    return `${(sizeInBytes / MB).toFixed(2)}MiB`;
+  }
+
+  return `${(sizeInBytes / KB).toFixed(2)}KiB`;
+}
+
+function formatDate(dateString) {
+  if (!dateString) return null;
+
+  const date = new Date(dateString);
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 module.exports = {
   extractExtensionId,
-  updateExtensionHistory
+  updateExtensionHistory,
+  formatFileSize,
+  formatDate
 };

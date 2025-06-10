@@ -1,3 +1,5 @@
+const { formatFileSize, formatDate } = require('../utils');
+
 async function fetchFirefoxExtensionInfo(slug) {
   const apiUrl = `https://addons.mozilla.org/api/v5/addons/addon/${slug}/`;
   console.log(`Fetching from API: ${apiUrl}`);
@@ -27,39 +29,8 @@ async function fetchFirefoxExtensionInfo(slug) {
 
     return formattedData;
   } catch (err) {
-    console.error(`Error fetching Firefox extension ${slug}:`, err);
-    throw new Error(`Failed to fetch extension info: ${err.message}`);
+    console.error(`Error fetching Firefox extension ${slug}:`, err); throw new Error(`Failed to fetch extension info: ${err.message}`);
   }
-}
-
-/**
- * Formats file size from bytes to KiB or MiB
- * @param {number} sizeInBytes - File size in bytes
- * @returns {string|null} Formatted file size or null if invalid
- */
-function formatFileSize(sizeInBytes) {
-  if (!sizeInBytes) return null;
-
-  const KB = 1024;
-  const MB = KB * 1024;
-
-  if (sizeInBytes >= MB) {
-    return `${(sizeInBytes / MB).toFixed(2)}MiB`;
-  }
-
-  return `${(sizeInBytes / KB).toFixed(2)}KiB`;
-}
-
-function formatDate(dateString) {
-  if (!dateString) return null;
-
-  const date = new Date(dateString);
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 module.exports = {
