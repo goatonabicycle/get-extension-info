@@ -1,4 +1,4 @@
-const { formatFileSize, formatDate } = require('../utils');
+const { formatFileSize, formatDate } = require('./utils');
 
 async function fetchFirefoxExtensionInfo(slug) {
   const apiUrl = `https://addons.mozilla.org/api/v5/addons/addon/${slug}/`;
@@ -29,7 +29,8 @@ async function fetchFirefoxExtensionInfo(slug) {
 
     return formattedData;
   } catch (err) {
-    console.error(`Error fetching Firefox extension ${slug}:`, err); throw new Error(`Failed to fetch extension info: ${err.message}`);
+    console.error(`Error fetching Firefox extension ${slug}:`, err);
+    throw new Error(`Failed to fetch extension info: ${err.message}`);
   }
 }
 

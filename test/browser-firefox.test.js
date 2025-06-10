@@ -1,4 +1,4 @@
-const { fetchFirefoxExtensionInfo } = require('../firefox-api');
+const { fetchFirefoxExtensionInfo } = require('../firefox');
 
 describe('Firefox Extensions', () => {
   describe('API', () => {

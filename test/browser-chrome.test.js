@@ -1,4 +1,4 @@
-const { fetchChromeExtensionInfo } = require('../chrome-api');
+const { fetchChromeExtensionInfo } = require('../chrome');
 
 describe('Chrome Extensions', () => {
   describe('API', () => {
