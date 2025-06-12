@@ -102,11 +102,60 @@ async function setupBrowser(options = {}) {
   async function cleanup() {
     await browser.close();
   }
-
   return {
     browser,
     createPage,
     cleanup
+  };
+}
+
+function extractVersion(text) {
+  if (!text) return null;
+  const match = text.match(/\d+\.\d+\.\d+/);
+  return match ? match[0] : null;
+}
+
+function extractUserCount(text) {
+  if (!text) return null;
+  const match = text.match(/(\d+,?\d+,?\d+,?\d+)/);
+  return match ? Number.parseInt(match[1].replace(/,/g, "")) : null;
+}
+
+function extractSizeFromText(text) {
+  if (!text) return null;
+  const match = text.match(/(\d+\.\d+)\s*([KMG]iB)/);
+  return match ? `${match[1]}${match[2]}` : null;
+}
+
+function isValidDateText(text) {
+  if (!text) return false;
+  return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
+    /\b\d{4}\b/.test(text);
+}
+
+function extractDateFromText(text) {
+  if (!text || !isValidDateText(text)) return null;
+
+  const match = text.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
+
+  if (match?.groups) {
+    return `${match.groups.month} ${Number.parseInt(match.groups.day)}, ${match.groups.year}`;
+  }
+
+  return null;
+}
+
+function formatExtensionData(data) {
+  return {
+    extension: data.extension,
+    lastUpdated: data.lastUpdated instanceof Date ? formatDate(data.lastUpdated) :
+      (typeof data.lastUpdated === 'string' && data.lastUpdated.includes('T')) ?
+        formatDate(data.lastUpdated) : data.lastUpdated,
+    version: typeof data.version === 'string' && !data.version.match(/^\d+\.\d+/) ? extractVersion(data.version) : data.version,
+    users: data.users,
+    size: typeof data.size === 'number' ? formatFileSize(data.size) : data.size,
+    url: data.url,
+    lastChecked: new Date().toISOString()
   };
 }
 
@@ -115,5 +164,11 @@ module.exports = {
   updateExtensionHistory,
   formatFileSize,
   formatDate,
-  setupBrowser
+  setupBrowser,
+  extractVersion,
+  extractUserCount,
+  extractSizeFromText,
+  isValidDateText,
+  extractDateFromText,
+  formatExtensionData
 };

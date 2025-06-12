@@ -1,8 +1,9 @@
-const { setupBrowser } = require('./utils');
+const { setupBrowser, extractVersion, extractUserCount, extractSizeFromText, extractDateFromText, formatExtensionData } = require('./utils');
 
 async function fetchChromeExtensionInfo(extensionId) {
   const { createPage, cleanup } = await setupBrowser();
   let extensionData = null;
+
   try {
     const page = await createPage('chrome');
     const url = `https://chromewebstore.google.com/detail/${extensionId}`;
@@ -24,9 +25,7 @@ async function fetchChromeExtensionInfo(extensionId) {
         const versionEl = Array.from(document.querySelectorAll("div")).find(
           (el) => el.textContent.includes("Version"),
         );
-        return versionEl
-          ? versionEl.textContent.match(/\d+\.\d+\.\d+/)?.[0]
-          : null;
+        return versionEl ? versionEl.textContent : null;
       };
 
       const getUsers = () => {
@@ -35,31 +34,17 @@ async function fetchChromeExtensionInfo(extensionId) {
             el.textContent.includes("users") &&
             el.textContent.match(/\d+,?\d+,?\d+,?\d+/),
         );
-        if (!userEl) return null;
-        const match = userEl.textContent.match(/(\d+,?\d+,?\d+,?\d+)/);
-        return match ? Number.parseInt(match[1].replace(/,/g, "")) : null;
+        return userEl ? userEl.textContent : null;
       };
 
       const getSize = () => {
         const sizeEl = Array.from(document.querySelectorAll("div")).find((el) =>
           el.textContent.includes("Size"),
         );
-        const sizeMatch = sizeEl
-          ? sizeEl.textContent.match(/(\d+\.\d+)\s*([KMG]iB)/)
-          : null;
-
-        if (sizeMatch) {
-          return `${sizeMatch[1]}${sizeMatch[2]}`; // Format as "5.50MiB" without space
-        }
-        return null;
+        return sizeEl ? sizeEl.textContent : null;
       };
 
       const getLastUpdated = () => {
-        const isValidDateText = (text) => {
-          return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
-            /\b\d{4}\b/.test(text);
-        };
-
         const updatedLabels = Array.from(document.querySelectorAll("div")).filter(el =>
           el.textContent.trim() === "Updated" ||
           el.textContent.includes("Last updated") ||
@@ -71,26 +56,18 @@ async function fetchChromeExtensionInfo(extensionId) {
             updatedLabels[0].parentElement?.nextElementSibling;
 
           if (dateElement) {
-            const dateText = dateElement.textContent.trim();
-            if (isValidDateText(dateText)) {
-              return dateText;
-            }
+            return dateElement.textContent.trim();
           }
         }
 
         const dateElements = Array.from(document.querySelectorAll("div")).filter(el => {
           const text = el.textContent || "";
-          return isValidDateText(text) &&
-            (text.includes("Updated") || text.includes("Published"));
+          return (text.includes("Updated") || text.includes("Published")) &&
+            (/January|February|March|April|May|June|July|August|September|October|November|December/.test(text));
         });
 
         if (dateElements.length > 0) {
-          const dateText = dateElements[0].textContent.trim();
-          const dateMatch = dateText.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
-
-          if (dateMatch?.groups) {
-            return `${dateMatch.groups.month} ${Number.parseInt(dateMatch.groups.day)}, ${dateMatch.groups.year}`;
-          }
+          return dateElements[0].textContent.trim();
         }
 
         return null;
@@ -98,23 +75,30 @@ async function fetchChromeExtensionInfo(extensionId) {
 
       return {
         extension: getText("h1"),
-        lastUpdated: getLastUpdated(),
-        version: getVersion(),
-        users: getUsers(),
-        size: getSize(),
-        url: window.location.href,
-        lastChecked: new Date().toISOString(),
+        lastUpdatedText: getLastUpdated(),
+        versionText: getVersion(),
+        usersText: getUsers(),
+        sizeText: getSize(),
+        url: window.location.href
       };
     });
 
+    const extractedData = {
+      extension: extensionData.extension,
+      lastUpdated: extractDateFromText(extensionData.lastUpdatedText),
+      version: extractVersion(extensionData.versionText),
+      users: extractUserCount(extensionData.usersText),
+      size: extractSizeFromText(extensionData.sizeText),
+      url: extensionData.url
+    };
+
+    return formatExtensionData(extractedData);
   } catch (error) {
     console.error(`Error fetching Chrome extension ${extensionId}:`, error);
     throw error;
   } finally {
     await cleanup();
   }
-
-  return extensionData;
 }
 
 module.exports = {
