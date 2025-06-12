@@ -82,12 +82,15 @@ async function setupBrowser(options = {}) {
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
   });
-
   async function createPage(browserType = 'chrome') {
     const page = await browser.newPage();
     if (browserType === 'firefox') {
       await page.setUserAgent(
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0"
+      );
+    } else if (browserType === 'edge') {
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/122.0.2365.92"
       );
     } else {
       await page.setUserAgent(
@@ -129,17 +132,47 @@ function extractSizeFromText(text) {
 
 function isValidDateText(text) {
   if (!text) return false;
-  return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
+
+  const hasMonthName = /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
     /\b\d{4}\b/.test(text);
+
+  const hasNumericDate = /\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(text);
+
+  return hasMonthName || hasNumericDate;
 }
 
 function extractDateFromText(text) {
-  if (!text || !isValidDateText(text)) return null;
+  if (!text) return null;
 
-  const match = text.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
+  if (!isValidDateText(text)) {
+    return new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
 
-  if (match?.groups) {
-    return `${match.groups.month} ${Number.parseInt(match.groups.day)}, ${match.groups.year}`;
+  const monthNameMatch = text.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
+
+  if (monthNameMatch?.groups) {
+    return `${monthNameMatch.groups.month} ${Number.parseInt(monthNameMatch.groups.day)}, ${monthNameMatch.groups.year}`;
+  }
+
+  const numericMatch = text.match(/\b(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})\b/);
+
+  if (numericMatch?.groups) {
+    const date = new Date(
+      Number.parseInt(numericMatch.groups.year),
+      Number.parseInt(numericMatch.groups.month) - 1,
+      Number.parseInt(numericMatch.groups.day)
+    );
+
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
   }
 
   return null;
