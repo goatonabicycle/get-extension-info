@@ -7,7 +7,7 @@
       "users": 62000000,
       "size": "55.68MiB",
       "url": "https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom",
-      "lastChecked": "2025-06-12T20:10:19.178Z"
+      "lastChecked": "2025-06-12T22:07:21.599Z"
     },
     {
       "extension": "Adblock Plus - free ad blocker",
@@ -16,7 +16,7 @@
       "users": 41000000,
       "size": "53.78MiB",
       "url": "https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb",
-      "lastChecked": "2025-06-12T20:10:24.527Z"
+      "lastChecked": "2025-06-12T22:07:27.606Z"
     }
   ],
   "firefox": [
@@ -27,7 +27,7 @@
       "users": 1287898,
       "size": "5.52MiB",
       "url": "https://addons.mozilla.org/en-US/firefox/addon/adblock-for-firefox/",
-      "lastChecked": "2025-06-12T20:10:24.852Z"
+      "lastChecked": "2025-06-12T22:07:28.242Z"
     },
     {
       "extension": "Adblock Plus",
@@ -36,27 +36,38 @@
       "users": 3217508,
       "size": "4.34MiB",
       "url": "https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/",
-      "lastChecked": "2025-06-12T20:10:24.875Z"
+      "lastChecked": "2025-06-12T22:07:28.559Z"
     }
   ],
   "edge": [
     {
       "extension": "AdBlock — block ads across the web",
-      "lastUpdated": "June 12, 2025",
+      "lastUpdated": "June 13, 2025",
       "version": "6.22.0",
       "users": 10000000,
       "size": null,
       "url": "https://microsoftedge.microsoft.com/addons/detail/adblock-%E2%80%94-block-ads-acros/ndcileolkflehcjpmjnfbnaibdcgglog",
-      "lastChecked": "2025-06-12T20:10:29.032Z"
+      "lastChecked": "2025-06-12T22:07:35.089Z"
     },
     {
       "extension": "Adblock Plus - free ad blocker",
-      "lastUpdated": "June 12, 2025",
+      "lastUpdated": "June 13, 2025",
       "version": "4.22.1",
       "users": 10000000,
       "size": null,
       "url": "https://microsoftedge.microsoft.com/addons/detail/adblock-plus-free-ad-bl/gmgoamodcdcjnbaobigkjelfplakmdhh",
-      "lastChecked": "2025-06-12T20:10:32.866Z"
+      "lastChecked": "2025-06-12T22:08:02.337Z"
+    }
+  ],
+  "opera": [
+    {
+      "extension": "Adblock Plus",
+      "lastUpdated": null,
+      "version": "4.22.1",
+      "users": 5411,
+      "size": null,
+      "url": "https://addons.opera.com/en/extensions/details/adblock-plus/",
+      "lastChecked": "2025-06-12T22:08:05.950Z"
     }
   ]
 }

@@ -82,6 +82,7 @@ async function setupBrowser(options = {}) {
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
   });
+
   async function createPage(browserType = 'chrome') {
     const page = await browser.newPage();
     if (browserType === 'firefox') {
@@ -91,6 +92,10 @@ async function setupBrowser(options = {}) {
     } else if (browserType === 'edge') {
       await page.setUserAgent(
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/122.0.2365.92"
+      );
+    } else if (browserType === 'opera') {
+      await page.setUserAgent(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 OPR/108.0.0.0"
       );
     } else {
       await page.setUserAgent(

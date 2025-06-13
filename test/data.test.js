@@ -49,6 +49,8 @@ describe('Data Structure', () => {
     expect(historyData).toHaveProperty('firefox');
     expect(latestData).toHaveProperty('edge');
     expect(historyData).toHaveProperty('edge');
+    expect(latestData).toHaveProperty('opera');
+    expect(historyData).toHaveProperty('opera');
   });
 
   test('Latest data should have proper extension structure', () => {
@@ -105,6 +107,28 @@ describe('Data Structure', () => {
       expect(extension.lastUpdated).toBeTruthy();
       expect(extension.version).toBeTruthy();
       expect(extension.users).toBeTruthy();
+      expect(extension.url).toBeTruthy();
+      expect(extension.lastChecked).toBeTruthy();
+    }
+
+    expect(latestData.opera).toBeInstanceOf(Array);
+
+    if (latestData.opera.length > 0) {
+      const extension = latestData.opera[0];
+
+      expect(extension).toHaveProperty('extension');
+      expect(extension).toHaveProperty('lastUpdated');
+      expect(extension).toHaveProperty('version');
+      expect(extension).toHaveProperty('users');
+      expect(extension).toHaveProperty('size');
+      expect(extension).toHaveProperty('url');
+      expect(extension).toHaveProperty('lastChecked');
+
+      expect(extension.extension).toBeTruthy();
+      expect(extension.lastUpdated).toBeTruthy();
+      expect(extension.version).toBeTruthy();
+      expect(extension.users).toBeTruthy();
+      expect(extension.size).toBeTruthy();
       expect(extension.url).toBeTruthy();
       expect(extension.lastChecked).toBeTruthy();
     }
@@ -180,6 +204,37 @@ describe('Data Structure', () => {
 
     if (historyData.edge.length > 0) {
       const extension = historyData.edge[0];
+
+      expect(extension).toHaveProperty('id');
+      expect(extension).toHaveProperty('name');
+      expect(extension).toHaveProperty('updates');
+      expect(extension.updates).toBeInstanceOf(Array);
+
+      expect(extension.id).toBeTruthy();
+      expect(extension.name).toBeTruthy();
+      expect(extension.updates.length).toBeGreaterThan(0);
+
+      if (extension.updates.length > 0) {
+        const update = extension.updates[0];
+
+        expect(update).toHaveProperty('version');
+        expect(update).toHaveProperty('users');
+        expect(update).toHaveProperty('size');
+        expect(update).toHaveProperty('lastUpdated');
+        expect(update).toHaveProperty('recordedAt');
+
+        expect(update.version).toBeTruthy();
+        expect(update.users).toBeTruthy();
+        expect(update.size).toBeTruthy();
+        expect(update.lastUpdated).toBeTruthy();
+        expect(update.recordedAt).toBeTruthy();
+      }
+    }
+
+    expect(historyData.opera).toBeInstanceOf(Array);
+
+    if (historyData.opera.length > 0) {
+      const extension = historyData.opera[0];
 
       expect(extension).toHaveProperty('id');
       expect(extension).toHaveProperty('name');
