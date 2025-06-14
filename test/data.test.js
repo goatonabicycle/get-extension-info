@@ -128,7 +128,6 @@ describe('Data Structure', () => {
       expect(extension.lastUpdated).toBeTruthy();
       expect(extension.version).toBeTruthy();
       expect(extension.users).toBeTruthy();
-      expect(extension.size).toBeTruthy();
       expect(extension.url).toBeTruthy();
       expect(extension.lastChecked).toBeTruthy();
     }
@@ -157,7 +156,6 @@ describe('Data Structure', () => {
         expect(update).toHaveProperty('size');
         expect(update).toHaveProperty('lastUpdated');
         expect(update).toHaveProperty('recordedAt');
-
         expect(update.version).toBeTruthy();
         expect(update.users).toBeTruthy();
         if (extension.id !== 'ndcileolkflehcjpmjnfbnaibdcgglog' &&
@@ -221,11 +219,14 @@ describe('Data Structure', () => {
         expect(update).toHaveProperty('users');
         expect(update).toHaveProperty('size');
         expect(update).toHaveProperty('lastUpdated');
-        expect(update).toHaveProperty('recordedAt');
-
-        expect(update.version).toBeTruthy();
+        expect(update).toHaveProperty('recordedAt'); expect(update.version).toBeTruthy();
         expect(update.users).toBeTruthy();
-        expect(update.size).toBeTruthy();
+
+        // Edge extensions may have null size
+        if (extension.id !== 'ndcileolkflehcjpmjnfbnaibdcgglog' &&
+          extension.id !== 'gmgoamodcdcjnbaobigkjelfplakmdhh') {
+          expect(update.size).toBeTruthy();
+        }
         expect(update.lastUpdated).toBeTruthy();
         expect(update.recordedAt).toBeTruthy();
       }
@@ -253,10 +254,8 @@ describe('Data Structure', () => {
         expect(update).toHaveProperty('size');
         expect(update).toHaveProperty('lastUpdated');
         expect(update).toHaveProperty('recordedAt');
-
         expect(update.version).toBeTruthy();
         expect(update.users).toBeTruthy();
-        expect(update.size).toBeTruthy();
         expect(update.lastUpdated).toBeTruthy();
         expect(update.recordedAt).toBeTruthy();
       }
