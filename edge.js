@@ -44,41 +44,23 @@ async function fetchEdgeExtensionInfo(extensionId) {
         return sizeEl ? sizeEl.textContent : null;
       };
       const getLastUpdated = () => {
-        const updatedLabels = Array.from(document.querySelectorAll("div")).filter(el =>
-          el.textContent.trim() === "Updated" ||
-          el.textContent.includes("Last updated") ||
-          el.textContent.includes("Updated:") ||
-          el.textContent.includes("Last Updated")
-        );
+        const allElements = Array.from(document.querySelectorAll("div, span, p"));
 
-        if (updatedLabels.length > 0) {
-          const dateElement = updatedLabels[0].nextElementSibling ||
-            updatedLabels[0].parentElement?.nextElementSibling;
+        const datePattern = /Updated\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/;
 
-          if (dateElement) {
-            return dateElement.textContent.trim();
+        for (const el of allElements) {
+          const text = el.textContent || "";
+          const match = text.match(datePattern);
+          if (match) {
+            return match[0].replace("Updated", "").trim();
           }
         }
 
-        const dateElements = Array.from(document.querySelectorAll("div, span, p")).filter(el => {
+        const monthPattern = /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/;
+        for (const el of allElements) {
           const text = el.textContent || "";
-          return (text.includes("Updated") || text.includes("Published")) &&
-            (/January|February|March|April|May|June|July|August|September|October|November|December/.test(text));
-        });
-
-        if (dateElements.length > 0) {
-          return dateElements[0].textContent.trim();
-        }
-
-        const datePattern = /\d{1,2}\/\d{1,2}\/\d{4}/;
-        const dateTextElements = Array.from(document.querySelectorAll("div, span, p")).filter(el => {
-          const text = el.textContent || "";
-          return datePattern.test(text);
-        });
-
-        if (dateTextElements.length > 0) {
-          const match = dateTextElements[0].textContent.match(datePattern);
-          if (match) {
+          const match = text.match(monthPattern);
+          if (match && text.includes("Version")) {
             return match[0];
           }
         }

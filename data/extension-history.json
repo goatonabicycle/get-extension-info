@@ -38,6 +38,13 @@
           "size": "56.28MiB",
           "lastUpdated": "June 13, 2025",
           "recordedAt": "2025-06-14T08:57:07.317Z"
+        },
+        {
+          "version": "6.25.0",
+          "users": 58000000,
+          "size": "58.3MiB",
+          "lastUpdated": "July 24, 2025",
+          "recordedAt": "2025-07-29T22:04:43.154Z"
         }
       ]
     },
@@ -79,6 +86,13 @@
           "size": "53.78MiB",
           "lastUpdated": "June 5, 2025",
           "recordedAt": "2025-06-14T08:57:07.317Z"
+        },
+        {
+          "version": "4.23.2",
+          "users": 38000000,
+          "size": "58.09MiB",
+          "lastUpdated": "July 16, 2025",
+          "recordedAt": "2025-07-29T22:04:43.154Z"
         }
       ]
     }
@@ -122,6 +136,13 @@
           "size": null,
           "lastUpdated": "June 12, 2025",
           "recordedAt": "2025-06-12T20:10:33.032Z"
+        },
+        {
+          "version": "6.25.0",
+          "users": 10000000,
+          "size": null,
+          "lastUpdated": "July 23, 2025",
+          "recordedAt": "2025-07-29T22:04:53.016Z"
         }
       ]
     },
@@ -135,6 +156,13 @@
           "size": null,
           "lastUpdated": "June 12, 2025",
           "recordedAt": "2025-06-12T20:10:33.032Z"
+        },
+        {
+          "version": "4.23.2",
+          "users": 10000000,
+          "size": null,
+          "lastUpdated": "July 15, 2025",
+          "recordedAt": "2025-07-29T22:04:53.016Z"
         }
       ]
     }

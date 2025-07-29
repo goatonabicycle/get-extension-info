@@ -2,72 +2,72 @@
   "chrome": [
     {
       "extension": "AdBlock — block ads across the web",
-      "lastUpdated": "June 13, 2025",
-      "version": "6.22.0",
-      "users": 61000000,
-      "size": "56.28MiB",
+      "lastUpdated": "July 24, 2025",
+      "version": "6.25.0",
+      "users": 58000000,
+      "size": "58.3MiB",
       "url": "https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom",
-      "lastChecked": "2025-06-14T08:57:00.966Z"
+      "lastChecked": "2025-07-29T22:04:37.081Z"
     },
     {
       "extension": "Adblock Plus - free ad blocker",
-      "lastUpdated": "June 5, 2025",
-      "version": "4.22.1",
-      "users": 40000000,
-      "size": "53.78MiB",
+      "lastUpdated": "July 16, 2025",
+      "version": "4.23.2",
+      "users": 38000000,
+      "size": "58.09MiB",
       "url": "https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb",
-      "lastChecked": "2025-06-14T08:57:07.087Z"
+      "lastChecked": "2025-07-29T22:04:42.958Z"
     }
   ],
   "firefox": [
     {
       "extension": "AdBlock for Firefox",
-      "lastUpdated": "June 10, 2025",
-      "version": "6.21.2",
-      "users": 1304523,
-      "size": "5.52MiB",
+      "lastUpdated": "July 14, 2025",
+      "version": "6.24.0",
+      "users": 1243168,
+      "size": "5.73MiB",
       "url": "https://addons.mozilla.org/en-US/firefox/addon/adblock-for-firefox/",
-      "lastChecked": "2025-06-14T08:57:07.454Z"
+      "lastChecked": "2025-07-29T22:04:43.592Z"
     },
     {
       "extension": "Adblock Plus",
-      "lastUpdated": "June 10, 2025",
-      "version": "4.22.1",
-      "users": 3261101,
-      "size": "4.34MiB",
+      "lastUpdated": "July 16, 2025",
+      "version": "4.23.2",
+      "users": 3049740,
+      "size": "4.51MiB",
       "url": "https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/",
-      "lastChecked": "2025-06-14T08:57:07.473Z"
+      "lastChecked": "2025-07-29T22:04:43.893Z"
     }
   ],
   "edge": [
     {
       "extension": "AdBlock — block ads across the web",
-      "lastUpdated": "June 14, 2025",
-      "version": "6.22.0",
+      "lastUpdated": "July 23, 2025",
+      "version": "6.25.0",
       "users": 10000000,
       "size": null,
       "url": "https://microsoftedge.microsoft.com/addons/detail/adblock-%E2%80%94-block-ads-acros/ndcileolkflehcjpmjnfbnaibdcgglog",
-      "lastChecked": "2025-06-14T08:57:14.007Z"
+      "lastChecked": "2025-07-29T22:04:47.544Z"
     },
     {
       "extension": "Adblock Plus - free ad blocker",
-      "lastUpdated": "June 14, 2025",
-      "version": "4.22.1",
+      "lastUpdated": "July 15, 2025",
+      "version": "4.23.2",
       "users": 10000000,
       "size": null,
       "url": "https://microsoftedge.microsoft.com/addons/detail/adblock-plus-free-ad-bl/gmgoamodcdcjnbaobigkjelfplakmdhh",
-      "lastChecked": "2025-06-14T08:57:18.406Z"
+      "lastChecked": "2025-07-29T22:04:52.858Z"
     }
   ],
   "opera": [
     {
       "extension": "Adblock Plus",
-      "lastUpdated": "June 14, 2025",
-      "version": "4.22.1",
-      "users": 4118503,
+      "lastUpdated": "July 30, 2025",
+      "version": "4.23.2",
+      "users": 5151,
       "size": null,
       "url": "https://addons.opera.com/en/extensions/details/adblock-plus/",
-      "lastChecked": "2025-06-14T08:57:22.188Z"
+      "lastChecked": "2025-07-29T22:04:56.329Z"
     }
   ]
 }
