@@ -5,6 +5,7 @@ const { fetchFirefoxExtensionInfo } = require("./firefox");
 const { fetchChromeExtensionInfo } = require("./chrome");
 const { fetchEdgeExtensionInfo } = require("./edge");
 const { fetchOperaExtensionInfo } = require("./opera");
+const { fetchGitLabReleases, getLatestGitLabReleases } = require("./gitlab-releases");
 
 const CHROME_EXTENSIONS = [
 	"gighmmpiobklfepjocnamgkkbiglidom", // AdBlock
@@ -225,6 +226,12 @@ async function main() {
 	for (const extensionInfo of operaExtensionsInfo) {
 		historyData = updateExtensionHistory(historyData, 'opera', extensionInfo);
 	}
+
+	console.log("Fetching GitLab release data...");
+	const gitlabReleases = await fetchGitLabReleases();
+	const latestGitLabReleases = getLatestGitLabReleases(gitlabReleases);
+
+	newLatestData.gitlab = latestGitLabReleases;
 
 	await fs.mkdir(path.dirname(LATEST_DATA_PATH), { recursive: true });
 	await fs.writeFile(LATEST_DATA_PATH, JSON.stringify(newLatestData, null, 2));
