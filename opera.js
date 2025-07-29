@@ -54,32 +54,31 @@ async function fetchOperaExtensionInfo(extensionId) {
       };
 
       const getLastUpdated = () => {
-        const updatedLabels = Array.from(document.querySelectorAll("div")).filter(el =>
-          el.textContent.trim() === "Updated" ||
-          el.textContent.includes("Last updated") ||
-          el.textContent.includes("Updated:") ||
-          el.textContent.includes("Last Updated")
-        );
+        const allElements = Array.from(document.querySelectorAll("div, span, p"));
 
-        if (updatedLabels.length > 0) {
-          const label = updatedLabels[0];
-          const parent = label.parentElement;
-          if (parent) {
-            const siblings = Array.from(parent.children);
-            const labelIndex = siblings.indexOf(label);
-            if (labelIndex >= 0 && labelIndex + 1 < siblings.length) {
-              return siblings[labelIndex + 1].textContent.trim();
-            }
+        const lastUpdatePattern = /Last update(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/;
+
+        for (const el of allElements) {
+          const text = el.textContent || "";
+          const match = text.match(lastUpdatePattern);
+          if (match) {
+            return match[0].replace("Last update", "").trim();
           }
         }
 
-        const dateElements = Array.from(document.querySelectorAll("div")).filter(el => {
-          const text = el.textContent.trim();
-          return /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\b/.test(text) ||
-            /\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(text);
-        });
+        const aboutSection = allElements.find(el =>
+          el.textContent?.includes("About the extension")
+        );
 
-        return dateElements.length > 0 ? dateElements[0].textContent.trim() : null;
+        if (aboutSection) {
+          const datePattern = /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/;
+          const match = aboutSection.textContent.match(datePattern);
+          if (match) {
+            return match[0];
+          }
+        }
+
+        return null;
       };
 
       return {
