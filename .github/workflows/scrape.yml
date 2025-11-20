@@ -18,10 +18,15 @@ jobs:
           
       - name: Install dependencies
         run: npm install
-        
+
+      - name: Download existing history from R2
+        run: |
+          mkdir -p data
+          curl -f -o data/extension-history.json https://pub-079f1d96c32c4039998e87fd3c5b549d.r2.dev/extension-history.json || echo "No existing history file found in R2, will use local version"
+
       - name: Run scraper script
         run: node index.js
-        
+
       - name: Upload to Cloudflare R2
         uses: ryand56/r2-upload-action@latest
         with:
