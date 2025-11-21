@@ -6,6 +6,7 @@ const { fetchChromeExtensionInfo } = require("./chrome");
 const { fetchEdgeExtensionInfo } = require("./edge");
 const { fetchOperaExtensionInfo } = require("./opera");
 const { fetchGitLabReleases, getLatestGitLabReleases } = require("./gitlab-releases");
+const { saveRSSFeed } = require("./rss-generator");
 
 const CHROME_EXTENSIONS = [
 	"gighmmpiobklfepjocnamgkkbiglidom", // AdBlock
@@ -32,6 +33,7 @@ const HISTORY_DATA_PATH = path.join(
 	"data",
 	"extension-history.json",
 );
+const RSS_FEED_PATH = path.join(__dirname, "data", "feed.rss");
 
 async function fetchAllChromeExtensionsInfo() {
 	const extensionsInfo = [];
@@ -238,6 +240,9 @@ async function main() {
 	await fs.writeFile(HISTORY_DATA_PATH, JSON.stringify(historyData, null, 2));
 
 	console.log("Extension data updated for Chrome, Firefox, Edge, and Opera");
+
+	console.log("Generating RSS feed...");
+	await saveRSSFeed(historyData, newLatestData, RSS_FEED_PATH);
 }
 
 main().catch(console.error);

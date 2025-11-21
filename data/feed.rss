@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Browser Extension Updates]]></title>
+        <description><![CDATA[Updates and changes to popular browser extensions]]></description>
+        <link>https://pub-079f1d96c32c4039998e87fd3c5b549d.r2.dev/</link>
+        <generator>get-extension-info</generator>
+        <lastBuildDate>Fri, 21 Nov 2025 09:07:22 GMT</lastBuildDate>
+        <atom:link href="https://pub-079f1d96c32c4039998e87fd3c5b549d.r2.dev/feed.rss" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[Now tracking: AdBlock — block ads across the web v6.32.1 (edge)]]></title>
+            <description><![CDATA[Version 6.32.1 | 16 000 000 users | Released: November 18, 2025]]></description>
+            <link>https://microsoftedge.microsoft.com/addons/detail/adblock-%E2%80%94-block-ads-acros/ndcileolkflehcjpmjnfbnaibdcgglog</link>
+            <guid isPermaLink="false">edge-ndcileolkflehcjpmjnfbnaibdcgglog-initial</guid>
+            <pubDate>Thu, 20 Nov 2025 20:19:15 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Now tracking: Adblock Plus - free ad blocker v4.31.1 (edge)]]></title>
+            <description><![CDATA[Version 4.31.1 | 12 000 000 users | Released: November 18, 2025]]></description>
+            <link>https://microsoftedge.microsoft.com/addons/detail/adblock-plus-free-ad-bl/gmgoamodcdcjnbaobigkjelfplakmdhh</link>
+            <guid isPermaLink="false">edge-gmgoamodcdcjnbaobigkjelfplakmdhh-initial</guid>
+            <pubDate>Thu, 20 Nov 2025 20:19:15 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Now tracking: AdBlock — block ads across the web v6.32.1 (chrome)]]></title>
+            <description><![CDATA[Version 6.32.1 | 62 000 000 users | Size: 66.82MiB | Released: November 20, 2025]]></description>
+            <link>https://chromewebstore.google.com/detail/adblock-%E2%80%94-block-ads-acros/gighmmpiobklfepjocnamgkkbiglidom</link>
+            <guid isPermaLink="false">chrome-gighmmpiobklfepjocnamgkkbiglidom-initial</guid>
+            <pubDate>Thu, 20 Nov 2025 20:19:07 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Now tracking: Adblock Plus - free ad blocker v4.31.1 (chrome)]]></title>
+            <description><![CDATA[Version 4.31.1 | 41 000 000 users | Size: 65.0MiB | Released: November 20, 2025]]></description>
+            <link>https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb</link>
+            <guid isPermaLink="false">chrome-cfhdojbkjhnklbpkdaibdccddilifddb-initial</guid>
+            <pubDate>Thu, 20 Nov 2025 20:19:07 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

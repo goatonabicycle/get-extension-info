@@ -9,7 +9,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "puppeteer": "^22.8.2"
+    "puppeteer": "^22.8.2",
+    "rss": "^1.2.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
