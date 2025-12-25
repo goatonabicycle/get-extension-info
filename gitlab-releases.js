@@ -21,16 +21,16 @@ async function fetchGitLabReleases() {
       const releaseHeaders = Array.from(document.querySelectorAll('h2, h3, .release-title, [data-testid*="release"]')).concat(
         Array.from(document.querySelectorAll('*')).filter(el => {
           const text = el.textContent || '';
-          return text.match(/^(Adblock Plus|AdBlock)\s+\d+\.\d+\.\d+$/) ||
-            text.match(/^(adblockplus|adblock)-\d+\.\d+\.\d+$/);
+          return text.match(/^(Adblock Plus|AdBlock)\s+\d+\.\d+\.\d+(\.\d+)?$/) ||
+            text.match(/^(adblockplus|adblock)-\d+\.\d+\.\d+(\.\d+)?$/);
         })
       );
 
       for (const header of releaseHeaders) {
         const headerText = header.textContent.trim();
 
-        const adblockPlusMatch = headerText.match(/^Adblock Plus\s+(\d+\.\d+\.\d+)$/);
-        const adblockMatch = headerText.match(/^AdBlock\s+(\d+\.\d+\.\d+)$/);
+        const adblockPlusMatch = headerText.match(/^Adblock Plus\s+(\d+\.\d+\.\d+(\.\d+)?)$/);
+        const adblockMatch = headerText.match(/^AdBlock\s+(\d+\.\d+\.\d+(\.\d+)?)$/);
 
         if (adblockPlusMatch || adblockMatch) {
           const extension = adblockPlusMatch ? 'adblockplus' : 'adblock';

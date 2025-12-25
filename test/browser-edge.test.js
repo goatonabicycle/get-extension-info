@@ -8,7 +8,7 @@ describe('Edge Extensions', () => {
 
       expect(extensionData.extension).toBeTruthy();
       expect(extensionData.extension).toContain('AdBlock');
-      expect(extensionData.version).toMatch(/^\d+\.\d+(\.\d+)?$/);
+      expect(extensionData.version).toMatch(/^\d+\.\d+\.\d+(\.\d+)?$/);
       expect(typeof extensionData.users).toBe('number');
       expect(extensionData.users).toBeGreaterThan(10000);
       expect(extensionData.lastUpdated).toBeTruthy();
@@ -23,7 +23,7 @@ describe('Edge Extensions', () => {
 
       expect(extensionData.extension).toBeTruthy();
       expect(extensionData.extension).toContain('Adblock Plus');
-      expect(extensionData.version).toMatch(/^\d+\.\d+(\.\d+)?$/);
+      expect(extensionData.version).toMatch(/^\d+\.\d+\.\d+(\.\d+)?$/);
       expect(typeof extensionData.users).toBe('number');
       expect(extensionData.users).toBeGreaterThan(10000);
       expect(extensionData.lastUpdated).toBeTruthy();

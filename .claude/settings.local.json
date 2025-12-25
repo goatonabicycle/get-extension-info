@@ -4,7 +4,8 @@
       "WebFetch(domain:pub-079f1d96c32c4039998e87fd3c5b549d.r2.dev)",
       "WebSearch",
       "Bash(npm view:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []

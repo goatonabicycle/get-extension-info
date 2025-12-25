@@ -119,7 +119,7 @@ async function setupBrowser(options = {}) {
 
 function extractVersion(text) {
   if (!text) return null;
-  const match = text.match(/\d+\.\d+\.\d+/);
+  const match = text.match(/\d+\.\d+\.\d+(\.\d+)?/);
   return match ? match[0] : null;
 }
 
@@ -189,7 +189,7 @@ function formatExtensionData(data) {
     lastUpdated: data.lastUpdated instanceof Date ? formatDate(data.lastUpdated) :
       (typeof data.lastUpdated === 'string' && data.lastUpdated.includes('T')) ?
         formatDate(data.lastUpdated) : data.lastUpdated,
-    version: typeof data.version === 'string' && !data.version.match(/^\d+\.\d+/) ? extractVersion(data.version) : data.version,
+    version: typeof data.version === 'string' && !data.version.match(/^\d+\.\d+(\.\d+)?/) ? extractVersion(data.version) : data.version,
     users: data.users,
     size: typeof data.size === 'number' ? formatFileSize(data.size) : data.size,
     url: data.url,

@@ -3,13 +3,15 @@
 describe('Parsing Functions', () => {  test('Version parser extracts semantic version numbers', () => {
     const getVersion = (text) => {
       if (!text) return null;
-      return text.match(/\d+\.\d+\.\d+/)?.[0] || null;
+      return text.match(/\d+\.\d+\.\d+(\.\d+)?/)?.[0] || null;
     };
 
     // Test various version formats
     expect(getVersion('Version: 4.46.0')).toBe('4.46.0');
     expect(getVersion('Current version is 1.2.3')).toBe('1.2.3');
     expect(getVersion('Version 10.0.1 released')).toBe('10.0.1');
+    expect(getVersion('Version: 1.1.1.1')).toBe('1.1.1.1');
+    expect(getVersion('Edge extension 2.0.0.5 available')).toBe('2.0.0.5');
     expect(getVersion('No version here')).toBe(null);
     expect(getVersion('')).toBe(null);
     expect(getVersion(null)).toBe(null);

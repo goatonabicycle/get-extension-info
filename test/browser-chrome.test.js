@@ -7,7 +7,7 @@ describe('Chrome Extensions', () => {
       const extensionData = await fetchChromeExtensionInfo(extensionId);
         expect(extensionData.extension).toBeTruthy();
       expect(extensionData.extension).toContain('AdBlock');
-      expect(extensionData.version).toMatch(/^\d+\.\d+\.\d+$/);
+      expect(extensionData.version).toMatch(/^\d+\.\d+\.\d+(\.\d+)?$/);
       expect(typeof extensionData.users).toBe('number');
       expect(extensionData.users).toBeGreaterThan(10000);
       expect(extensionData.lastUpdated).toBeTruthy();
@@ -19,7 +19,7 @@ describe('Chrome Extensions', () => {
       const extensionId = "cfhdojbkjhnklbpkdaibdccddilifddb";
       const extensionData = await fetchChromeExtensionInfo(extensionId);      expect(extensionData.extension).toBeTruthy();
       expect(extensionData.extension).toContain('Adblock Plus');
-      expect(extensionData.version).toMatch(/^\d+\.\d+\.\d+$/);
+      expect(extensionData.version).toMatch(/^\d+\.\d+\.\d+(\.\d+)?$/);
       expect(typeof extensionData.users).toBe('number');
       expect(extensionData.users).toBeGreaterThan(10000);
       expect(extensionData.lastUpdated).toBeTruthy();
