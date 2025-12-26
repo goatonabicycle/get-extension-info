@@ -54,27 +54,40 @@ async function fetchOperaExtensionInfo(extensionId) {
       };
 
       const getLastUpdated = () => {
-        const allElements = Array.from(document.querySelectorAll("div, span, p"));
+        const allElements = Array.from(document.querySelectorAll("div, span, p, dt, dd"));
 
-        const lastUpdatePattern = /Last update(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/;
+        // Pattern for abbreviated months (Dec. 17, 2025)
+        const abbreviatedPattern = /Last update\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.?\s+\d{1,2},\s+\d{4}/i;
+        // Pattern for full months (December 17, 2025)
+        const fullPattern = /Last update\s*(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/i;
 
         for (const el of allElements) {
           const text = el.textContent || "";
-          const match = text.match(lastUpdatePattern);
-          if (match) {
-            return match[0].replace("Last update", "").trim();
+
+          const abbrevMatch = text.match(abbreviatedPattern);
+          if (abbrevMatch) {
+            return abbrevMatch[0].replace(/Last update\s*/i, "").trim();
+          }
+
+          const fullMatch = text.match(fullPattern);
+          if (fullMatch) {
+            return fullMatch[0].replace(/Last update\s*/i, "").trim();
           }
         }
 
-        const aboutSection = allElements.find(el =>
-          el.textContent?.includes("About the extension")
+        // Try to find date near "Last update" label
+        const lastUpdateLabel = allElements.find(el =>
+          el.textContent?.toLowerCase().includes("last update")
         );
 
-        if (aboutSection) {
-          const datePattern = /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/;
-          const match = aboutSection.textContent.match(datePattern);
-          if (match) {
-            return match[0];
+        if (lastUpdateLabel) {
+          const sibling = lastUpdateLabel.nextElementSibling;
+          if (sibling) {
+            const datePattern = /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.?\s+\d{1,2},\s+\d{4}/i;
+            const match = sibling.textContent?.match(datePattern);
+            if (match) {
+              return match[0];
+            }
           }
         }
 

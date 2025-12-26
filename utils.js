@@ -138,12 +138,14 @@ function extractSizeFromText(text) {
 function isValidDateText(text) {
   if (!text) return false;
 
-  const hasMonthName = /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
+  const hasFullMonthName = /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\b/.test(text) &&
     /\b\d{4}\b/.test(text);
+
+  const hasAbbrevMonthName = /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.?\s+\d{1,2},?\s+\d{4}\b/.test(text);
 
   const hasNumericDate = /\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(text);
 
-  return hasMonthName || hasNumericDate;
+  return hasFullMonthName || hasAbbrevMonthName || hasNumericDate;
 }
 
 function extractDateFromText(text) {
@@ -157,12 +159,30 @@ function extractDateFromText(text) {
     });
   }
 
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const abbrevMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  // Full month name match (e.g., "December 17, 2025")
   const monthNameMatch = text.match(/\b(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
 
   if (monthNameMatch?.groups) {
     return `${monthNameMatch.groups.month} ${Number.parseInt(monthNameMatch.groups.day)}, ${monthNameMatch.groups.year}`;
   }
 
+  // Abbreviated month name match (e.g., "Dec. 17, 2025" or "Dec 17, 2025")
+  const abbrevMatch = text.match(/\b(?<month>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.?\s+(?<day>\d{1,2}),?\s+(?<year>\d{4})\b/);
+
+  if (abbrevMatch?.groups) {
+    const monthIndex = abbrevMonths.indexOf(abbrevMatch.groups.month);
+    const fullMonth = months[monthIndex];
+    return `${fullMonth} ${Number.parseInt(abbrevMatch.groups.day)}, ${abbrevMatch.groups.year}`;
+  }
+
+  // Numeric date match (e.g., "12/17/2025")
   const numericMatch = text.match(/\b(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})\b/);
 
   if (numericMatch?.groups) {
@@ -171,11 +191,6 @@ function extractDateFromText(text) {
       Number.parseInt(numericMatch.groups.month) - 1,
       Number.parseInt(numericMatch.groups.day)
     );
-
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
 
     return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
   }
