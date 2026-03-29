@@ -48,7 +48,11 @@ function generateRSSFeed(historyData, latestData, options = {}) {
 						title: `${extension.name} updated to v${latestUpdate.version} (${store})`,
 						guid: `${store}-${extension.id}-${latestUpdate.version}`,
 						url: getExtensionLink(store, extension.id, latestData[store]),
-						description: buildDescription(extension, latestUpdate, previousUpdate),
+						description: buildDescription(
+							extension,
+							latestUpdate,
+							previousUpdate,
+						),
 						date: new Date(latestUpdate.recordedAt),
 					});
 				}
@@ -115,7 +119,9 @@ function buildDescription(extension, latest, previous) {
 function getExtensionLink(store, extensionId, latestStoreData) {
 	// Try to get URL from latest data
 	if (Array.isArray(latestStoreData)) {
-		const extData = latestStoreData.find((ext) => ext.url?.includes(extensionId));
+		const extData = latestStoreData.find((ext) =>
+			ext.url?.includes(extensionId),
+		);
 		if (extData?.url) return extData.url;
 	}
 
