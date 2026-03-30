@@ -60,7 +60,7 @@ describe("RSS Feed Generator", () => {
 		const rss = generateRSSFeed(mockHistoryData, mockLatestData);
 
 		expect(rss).toContain('<?xml version="1.0" encoding="UTF-8"?>');
-		expect(rss).toContain('<rss');
+		expect(rss).toContain("<rss");
 		expect(rss).toContain('version="2.0"');
 		expect(rss).toContain("<channel>");
 		expect(rss).toContain("</channel>");

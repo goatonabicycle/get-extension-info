@@ -1,19 +1,19 @@
 {
-  "name": "get-extension-info",
-  "version": "1.0.0",
-  "main": "index.js",
-  "packageManager": "pnpm@10.9.0",
-  "scripts": {
-    "start": "node index.js",
-    "lint": "pnpm exec @biomejs/biome format --write .",
-    "test": "jest"
-  },
-  "dependencies": {
-    "puppeteer": "^22.8.2",
-    "rss": "^1.2.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "jest": "^29.7.0"
-  }
+	"name": "get-extension-info",
+	"version": "1.0.0",
+	"main": "index.js",
+	"packageManager": "pnpm@10.9.0",
+	"scripts": {
+		"start": "node index.js",
+		"lint": "npx @biomejs/biome format --write .",
+		"test": "jest"
+	},
+	"dependencies": {
+		"puppeteer": "^22.8.2",
+		"rss": "^1.2.2"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"jest": "^29.7.0"
+	}
 }

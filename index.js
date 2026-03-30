@@ -5,7 +5,10 @@ const { fetchFirefoxExtensionInfo } = require("./firefox");
 const { fetchChromeExtensionInfo } = require("./chrome");
 const { fetchEdgeExtensionInfo } = require("./edge");
 const { fetchOperaExtensionInfo } = require("./opera");
-const { fetchGitLabReleases, getLatestGitLabReleases } = require("./gitlab-releases");
+const {
+	fetchGitLabReleases,
+	getLatestGitLabReleases,
+} = require("./gitlab-releases");
 const { saveRSSFeed } = require("./rss-generator");
 
 const CHROME_EXTENSIONS = [
@@ -14,8 +17,8 @@ const CHROME_EXTENSIONS = [
 ];
 
 const FIREFOX_EXTENSIONS = [
-	{ slug: "adblock-for-firefox" },  // AdBlock
-	{ slug: "adblock-plus" },  // Adblock Plus
+	{ slug: "adblock-for-firefox" }, // AdBlock
+	{ slug: "adblock-plus" }, // Adblock Plus
 ];
 
 const EDGE_EXTENSIONS = [
@@ -51,7 +54,6 @@ async function fetchAllFirefoxExtensionsInfo() {
 	const extensionsInfo = [];
 
 	for (const extension of FIREFOX_EXTENSIONS) {
-
 		console.log(`Fetching Firefox extension: ${extension.slug}`);
 		const extensionInfo = await fetchFirefoxExtensionInfo(extension.slug);
 		extensionsInfo.push(extensionInfo);
@@ -91,7 +93,9 @@ async function main() {
 		const historyContent = await fs.readFile(HISTORY_DATA_PATH, "utf8");
 		const validJSON = historyContent.replace(/^\s*\/\/.*\r?\n/gm, "");
 		historyData = JSON.parse(validJSON);
-		console.log(`Loaded history data for ${Object.keys(historyData).length} stores`);
+		console.log(
+			`Loaded history data for ${Object.keys(historyData).length} stores`,
+		);
 	} catch (error) {
 		console.log(
 			"No existing history file found, checking for latest data to use as initial history",
@@ -118,13 +122,15 @@ async function main() {
 						historyData.chrome.push({
 							id: id,
 							name: ext.extension,
-							updates: [{
-								version: ext.version,
-								users: ext.users,
-								size: ext.size,
-								lastUpdated: ext.lastUpdated,
-								recordedAt: ext.lastChecked || new Date().toISOString(),
-							}],
+							updates: [
+								{
+									version: ext.version,
+									users: ext.users,
+									size: ext.size,
+									lastUpdated: ext.lastUpdated,
+									recordedAt: ext.lastChecked || new Date().toISOString(),
+								},
+							],
 						});
 					}
 				}
@@ -141,13 +147,15 @@ async function main() {
 					historyData.firefox.push({
 						id: extId,
 						name: ext.extension,
-						updates: [{
-							version: ext.version,
-							users: ext.users,
-							size: ext.size,
-							lastUpdated: ext.lastUpdated,
-							recordedAt: ext.lastChecked || new Date().toISOString(),
-						}],
+						updates: [
+							{
+								version: ext.version,
+								users: ext.users,
+								size: ext.size,
+								lastUpdated: ext.lastUpdated,
+								recordedAt: ext.lastChecked || new Date().toISOString(),
+							},
+						],
 					});
 				}
 			}
@@ -163,13 +171,15 @@ async function main() {
 					historyData.edge.push({
 						id: extId,
 						name: ext.extension,
-						updates: [{
-							version: ext.version,
-							users: ext.users,
-							size: ext.size,
-							lastUpdated: ext.lastUpdated,
-							recordedAt: ext.lastChecked || new Date().toISOString(),
-						}],
+						updates: [
+							{
+								version: ext.version,
+								users: ext.users,
+								size: ext.size,
+								lastUpdated: ext.lastUpdated,
+								recordedAt: ext.lastChecked || new Date().toISOString(),
+							},
+						],
 					});
 				}
 			}
@@ -185,13 +195,15 @@ async function main() {
 					historyData.opera.push({
 						id: extId,
 						name: ext.extension,
-						updates: [{
-							version: ext.version,
-							users: ext.users,
-							size: ext.size,
-							lastUpdated: ext.lastUpdated,
-							recordedAt: ext.lastChecked || new Date().toISOString(),
-						}],
+						updates: [
+							{
+								version: ext.version,
+								users: ext.users,
+								size: ext.size,
+								lastUpdated: ext.lastUpdated,
+								recordedAt: ext.lastChecked || new Date().toISOString(),
+							},
+						],
 					});
 				}
 			}
@@ -209,24 +221,29 @@ async function main() {
 	newLatestData.chrome = chromeExtensionsInfo;
 
 	for (const extensionInfo of chromeExtensionsInfo) {
-		historyData = updateExtensionHistory(historyData, 'chrome', extensionInfo);
+		historyData = updateExtensionHistory(historyData, "chrome", extensionInfo);
 	}
 
 	const firefoxExtensionsInfo = await fetchAllFirefoxExtensionsInfo();
 	newLatestData.firefox = firefoxExtensionsInfo;
 	for (const extensionInfo of firefoxExtensionsInfo) {
-		historyData = updateExtensionHistory(historyData, 'firefox', extensionInfo, 'url');
+		historyData = updateExtensionHistory(
+			historyData,
+			"firefox",
+			extensionInfo,
+			"url",
+		);
 	}
 	const edgeExtensionsInfo = await fetchAllEdgeExtensionsInfo();
 	newLatestData.edge = edgeExtensionsInfo;
 	for (const extensionInfo of edgeExtensionsInfo) {
-		historyData = updateExtensionHistory(historyData, 'edge', extensionInfo);
+		historyData = updateExtensionHistory(historyData, "edge", extensionInfo);
 	}
 
 	const operaExtensionsInfo = await fetchAllOperaExtensionsInfo();
 	newLatestData.opera = operaExtensionsInfo;
 	for (const extensionInfo of operaExtensionsInfo) {
-		historyData = updateExtensionHistory(historyData, 'opera', extensionInfo);
+		historyData = updateExtensionHistory(historyData, "opera", extensionInfo);
 	}
 
 	console.log("Fetching GitLab release data...");
