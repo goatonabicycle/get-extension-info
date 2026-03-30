@@ -108,10 +108,6 @@ async function setupBrowser(options = {}) {
 			await page.setUserAgent(
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
 			);
-		} else if (browserType === "edge") {
-			await page.setUserAgent(
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edg/122.0.2365.92",
-			);
 		} else if (browserType === "opera") {
 			await page.setUserAgent(
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 OPR/108.0.0.0",

@@ -29,9 +29,11 @@ async function fetchEdgeExtensionInfo(extensionId) {
 			};
 
 			const getVersion = () => {
-				const versionEl = Array.from(document.querySelectorAll("div")).find(
-					(el) => el.textContent.includes("Version"),
-				);
+				const byId = document.querySelector("#versionLabel");
+				if (byId) return byId.textContent;
+				const versionEl = Array.from(
+					document.querySelectorAll("span, div"),
+				).find((el) => el.textContent.trim().match(/^Version \d+\.\d+/));
 				return versionEl ? versionEl.textContent : null;
 			};
 
@@ -88,6 +90,10 @@ async function fetchEdgeExtensionInfo(extensionId) {
 				url: window.location.href,
 			};
 		});
+		console.log(
+			`[Edge] ${extensionId} — url: ${extensionData.url} | versionText: ${extensionData.versionText}`,
+		);
+
 		const extractedData = {
 			extension: extensionData.extension,
 			lastUpdated:
